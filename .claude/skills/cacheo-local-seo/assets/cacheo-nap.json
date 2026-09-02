@@ -1,0 +1,54 @@
+{
+  "_comment": "Canonical NAP for Cacheo Insurance Agency. This file is the single source of truth for every listing check. If the agency moves, changes phone, or changes hours, edit THIS file first, then re-run the checker. CLAUDE.md in the Cacheo Agency workspace wins if the two ever disagree.",
+  "name": "Farmers Insurance - Francisco Cacheo",
+  "address": {
+    "street": "4510 E Pacific Coast Hwy Ste 450",
+    "city": "Long Beach",
+    "state": "CA",
+    "zip": "90804"
+  },
+  "phone": "(310) 734-6151",
+  "website": "https://agents.farmers.com/ca/long-beach/francisco-cacheo",
+  "gbp_url": "https://www.google.com/search?kgmid=/g/1tjxfy0j&q=Farmers+Insurance+-+Francisco+Cacheo",
+  "hours": {
+    "monday": "08:00-17:00",
+    "tuesday": "08:00-17:00",
+    "wednesday": "08:00-17:00",
+    "thursday": "08:00-17:00",
+    "friday": "08:00-17:00",
+    "saturday": "by appointment",
+    "sunday": "closed"
+  },
+  "primary_category": "Insurance agency",
+  "services": [
+    "Auto insurance",
+    "Home insurance",
+    "Renters insurance",
+    "Business insurance",
+    "Life insurance",
+    "Umbrella insurance"
+  ],
+  "service_areas": [
+    "Long Beach",
+    "Lakewood",
+    "Signal Hill",
+    "Seal Beach",
+    "Los Alamitos",
+    "Cerritos",
+    "Carson",
+    "San Pedro"
+  ],
+  "languages": [
+    "English",
+    "Spanish"
+  ],
+  "_unverified": {
+    "_comment": "Values I could not confirm from the Cacheo Agency workspace. Confirm each against CLAUDE.md or the live listing BEFORE trusting a report that uses them, then delete the field name from this list.",
+    "fields": [
+      "website",
+      "service_areas",
+      "primary_category",
+      "services"
+    ]
+  }
+}
