@@ -1,0 +1,51 @@
+--- a/daily-az-report/SKILL.md
++++ b/daily-az-report/SKILL.md
+@@ -1,12 +1,15 @@
+ ---
+ name: daily-az-report
+ description: >
+-  Generates the Cacheo Insurance Agency daily AgencyZoom morning briefing. Use this skill
+-  whenever the task involves: running the daily AZ report, generating the morning briefing,
+-  processing AgencyZoom metrics, or executing the daily-az-report scheduled task. Also triggers
+-  when the user hands you a scheduled task file named "daily-az-report" or asks to "run the
+-  AgencyZoom report", "generate the ops briefing", or "pull today's AZ data". This skill
+-  handles the full workflow: login → data extraction → DOCX generation → HTML email send.
++  Daily AgencyZoom morning briefing for Cacheo Insurance Agency — one day's
++  production snapshot: sales booked today, dashboard metrics against monthly
++  goal, and the YTD leaderboard. Triggers on "run the AgencyZoom report",
++  "generate the ops briefing", "pull today's AZ data", "run the daily report",
++  "how did we do today", or the scheduled task file named "daily-az-report".
++  NOT for lead aging or stage movement (use weekly-pipeline-report). NOT for
++  retention, churn, or book depth (use quarterly-retention-report). NOT for
++  call volume (use phone-report). NOT for one-off AgencyZoom lookups that do
++  not produce the briefing document (use agencyzoom).
+ ---
+ 
+ # Daily AgencyZoom Briefing — Skill
+--- a/weekly-pipeline-report/SKILL.md
++++ b/weekly-pipeline-report/SKILL.md
+@@ -1,14 +1,16 @@
+ ---
+ name: weekly-pipeline-report
+ description: >
+-  Generates the Cacheo Insurance Agency weekly AgencyZoom pipeline aging report. Use this skill
+-  whenever the task involves: running the weekly pipeline report, checking lead status across
+-  pipelines, flagging aging or stalled leads, or executing the weekly-pipeline-report scheduled
+-  task. Also triggers when the user hands you a scheduled task file named "weekly-pipeline-report"
+-  or asks to "run the pipeline report", "check aging leads", "which leads are stuck", or "pull the
+-  weekly pipeline status". Covers 5 pipelines: Commercial, Cross Sell & Referrals, Life Leads,
+-  Online Auto Leads, Online Home Leads. Full workflow: login → per-pipeline extraction → aging
+-  computation → DOCX generation → HTML email send.
++  Weekly lead-aging review for Cacheo Insurance Agency, covering five
++  AgencyZoom pipelines: Commercial, Cross Sell & Referrals, Life Leads, Online
++  Auto Leads, Online Home Leads. Answers which specific leads have sat too long
++  in a stage and who owns them. Triggers on "run the pipeline report", "check
++  aging leads", "which leads are stuck", "what's stalled", "pull the weekly
++  pipeline status", or the scheduled task file named "weekly-pipeline-report".
++  NOT for a single day's production numbers or the morning briefing (use
++  daily-az-report). NOT for retention or churn (use
++  quarterly-retention-report). NOT for querying a single lead on demand (use
++  agencyzoom).
+ ---
+ 
+ # Weekly Pipeline Aging Report — Skill
