@@ -51,3 +51,13 @@ Partial degradation still sends by design; only a genuinely broken run is held.
 The hardcoded credential at Step 1 is untouched — removing it requires deciding
 how the report authenticates, which is a separate change. Rotating the
 AgencyZoom password will break this login until that is resolved.
+
+---
+
+# skill-descriptions.diff
+
+Frontmatter `description` rewrites for `daily-az-report` and
+`weekly-pipeline-report`, resolving the only `skill-originality.py` trigger
+failure in the collection (20.0% -> 5.3%). See `skill-descriptions.md` for the
+cause, what changed, and the verification. Frontmatter only; no behavior
+change. Applied the same way — upload the edited `SKILL.md` in skills settings.
