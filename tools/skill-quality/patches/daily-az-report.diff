@@ -1,0 +1,83 @@
+--- SKILL.md.orig	2026-09-02 15:02:41.561195681 +0000
++++ SKILL.md	2026-09-02 15:02:41.628586441 +0000
+@@ -49,8 +49,22 @@
+ pw.value.length
+ ```
+ 
+-4. Click the Login button at approximately (810, 538), then `wait` 3 seconds.
+-5. Confirm success: page title should change to "My Dashboard".
++4. Click the Login button by selector, not by coordinate — a fixed position misses whenever the
++   window size, zoom, or a banner shifts the layout:
++
++```javascript
++// javascript_tool — click Login
++const btn = document.querySelector('button[type="submit"], input[type="submit"]')
++  || [...document.querySelectorAll('button')].find(b => /log ?in|sign ?in/i.test(b.textContent));
++if (!btn) throw new Error('LOGIN_BUTTON_NOT_FOUND');
++btn.click();
++'clicked: ' + btn.textContent.trim();
++```
++
++   Then `wait` 3 seconds. If this throws `LOGIN_BUTTON_NOT_FOUND`, the page did not render the
++   form — screenshot before retrying; do not fall back to a coordinate click.
++5. Confirm success: page title should change to "My Dashboard". If it does not, login failed —
++   record `loginOk: false` and carry it into the Step 2.5 gate.
+ 
+ ---
+ 
+@@ -67,7 +81,7 @@
+ ({
+   mtdPremium:    (t.match(/CURRENTLY AT\s*\$([\d,]+)/i) || [])[1] || 'N/A',
+   goalPct:       (t.match(/([\d]+)%\s*OF GOAL/i) || [])[1] || 'N/A',
+-  monthlyGoal:   (t.match(/goal of \$([\d,]+)/i) || [])[1] || '30,000',
++  monthlyGoal:   (t.match(/goal of \$([\d,]+)/i) || [])[1] || 'N/A',  // never default to a real-looking figure
+   trendPremium:  (t.match(/TRENDING FOR\s*\$([\d,]+)/i) || [])[1] || 'N/A',
+   trendBelowPct: (t.match(/([\d]+)%\s*below goal/i) || [])[1] || 'N/A',
+   lastMonthAmt:  (t.match(/\$([\d,]+)\s*LAST MONTH/i) || [])[1] || 'N/A',
+@@ -183,6 +197,46 @@
+ 
+ ---
+ 
++## Step 2.5 — Validate before building (gate)
++
++Run this before Step 3. It decides whether the extraction is good enough to send. On a healthy
++run it passes silently and nothing downstream changes.
++
++**Count `'N/A'`, not zeros.** A zero is usually a real value — `achievedToday` is legitimately
++`'0'` before the first sale of the day, and an empty task list is a real state. `'N/A'` is
++different: it only appears when a regex matched nothing, which means the page did not load, the
++session was not authenticated, or the markup moved.
++
++```javascript
++// Run against the assembled reportData, before generating the DOCX.
++const d = reportData.dashboardStats || {};
++const naCount = Object.values(d).filter(v => v === 'N/A').length;
++const fields  = Object.keys(d).length;
++
++const failures = [];
++if (reportData.loginOk === false)              failures.push('login did not reach My Dashboard');
++if (fields && naCount >= Math.ceil(fields * 0.6)) failures.push(`dashboard: ${naCount}/${fields} fields N/A`);
++if ((reportData.ytdLeaderboard || []).length === 0) failures.push('YTD leaderboard empty');
++if ((reportData.dailySales || []).length === 0)     failures.push('daily sales empty');
++
++failures;
++```
++
++**If `failures` is empty** — continue to Step 3 unchanged.
++
++**If `failures` is non-empty** — do **not** build the DOCX and do **not** send the briefing.
++A briefing full of `N/A` reads as a quiet day, not as a broken run, and that is the failure this
++gate exists to prevent. Instead send a plain-text email to the usual recipients:
++
++> Subject: `AZ briefing did not run — {date}`
++>
++> Body: the `failures` list, plus the URL of the first section that failed, so the run can be
++> repeated by hand.
++
++Then stop. Do not partially send, and do not substitute values from a previous day.
++
++---
++
+ ## Step 3 — Generate DOCX
+ 
+ The DOCX generator script is bundled at `{SKILL_DIR}/scripts/gen_briefing.js`.
